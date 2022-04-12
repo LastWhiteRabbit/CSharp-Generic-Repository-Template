@@ -3,47 +3,33 @@ using UnitOfWork.Data;
 using UnitOfWork.Models;
 using UnitOfWork.Interfaces;
 using AutoMapper;
+using UnitOfWork.SearchObject;
 
 namespace UnitOfWork.Services
 {
-    public class WeatherForecastService : IWeatherForecastService
+    public class WeatherForecastService :
+        BaseService<Models.WeatherForecast, Entities.WeatherForecast, WeatherForecastSearchObject>, IWeatherForecastService
     {
-        private readonly DataContext _context;
-
-        private readonly IMapper _mapper;
-
-        public WeatherForecastService(DataContext context, IMapper mapper)
+        public WeatherForecastService(DataContext context, IMapper mapper) : base(context,mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<WeatherForecast>> GetWeatherForecastAsync()
+        public override IQueryable<Entities.WeatherForecast> AddFilter(IQueryable<Entities.WeatherForecast> query, WeatherForecastSearchObject? search = null)
         {
-            var result = await _context.WeatherForecasts.ToListAsync();
+            var filteredQuery = base.AddFilter(query, search);
 
-            //This is how you return WeatherForecasts without using AutoMapper
+            if (search?.TemperatureC != null)
+            {
+                filteredQuery = filteredQuery.Where(x => x.TemperatureC == search.TemperatureC);
+            }
 
-            //List<WeatherForecast> list = new List<WeatherForecast>();
 
-            //foreach (var item in result)
+            //if (search?.TemperatureF != null)
             //{
-            //    list.Add(new WeatherForecast()
-            //    {
-            //        Date = item.Date,
-            //        TemperatureC = item.TemperatureC,
-            //        Summary = item.Summary
-            //    });
+            //    filteredQuery = filteredQuery.Where(x => x.TemperatureF == search.TemperatureF);
             //}
-            //return list;
 
-            return _mapper.Map<List<Models.WeatherForecast>>(result);
-        }
-        public async Task<WeatherForecast> GetForecastByIdAsync(int id)
-        {
-            var result = await _context.WeatherForecasts.FindAsync(id);
-
-            return _mapper.Map<Models.WeatherForecast>(result);
+            return filteredQuery;
         }
 
     }

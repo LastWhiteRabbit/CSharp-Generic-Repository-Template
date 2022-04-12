@@ -1,11 +1,10 @@
 ﻿using UnitOfWork.Models;
+using UnitOfWork.SearchObject;
 
 namespace UnitOfWork.Interfaces
 {
-    public interface IWeatherForecastService
+    public interface IWeatherForecastService : IService<WeatherForecast, WeatherForecastSearchObject>
     {
-        Task<IEnumerable<WeatherForecast>> GetWeatherForecastAsync();
 
-        Task<WeatherForecast> GetForecastByIdAsync(int id);
     }
 }
