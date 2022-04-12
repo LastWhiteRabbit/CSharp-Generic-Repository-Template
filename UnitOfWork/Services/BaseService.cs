@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using UnitOfWork.Data;
 using UnitOfWork.Interfaces;
+using UnitOfWork.SearchObject;
 
 namespace UnitOfWork.Services
 {
-    public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : class
+    public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : BaseSearchObject
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -44,6 +45,11 @@ namespace UnitOfWork.Services
             var entity = _context.Set<TDb>().AsQueryable();
 
             entity = AddFilter(entity, search);
+
+            if(search?.Page.HasValue == true && search?.PageSize.HasValue == true)
+            {
+                entity = entity.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+            }
 
             var list = await entity.ToListAsync();
 

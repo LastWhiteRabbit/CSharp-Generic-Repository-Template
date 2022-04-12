@@ -29,6 +29,8 @@ namespace UnitOfWork.Services
             //    filteredQuery = filteredQuery.Where(x => x.TemperatureF == search.TemperatureF);
             //}
 
+
+
             return filteredQuery;
         }
 
