@@ -8,8 +8,9 @@ namespace UnitOfWork.Services
 {
     public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : BaseSearchObject
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
+        public DataContext _context { get; set; }
+        public IMapper _mapper { get; set; }
+
         public BaseService(DataContext context, IMapper mapper)
         {
             _context = context;

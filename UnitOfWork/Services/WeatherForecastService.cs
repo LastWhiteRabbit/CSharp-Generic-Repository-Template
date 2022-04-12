@@ -4,11 +4,12 @@ using UnitOfWork.Models;
 using UnitOfWork.Interfaces;
 using AutoMapper;
 using UnitOfWork.SearchObject;
+using UnitOfWork.Requests;
 
 namespace UnitOfWork.Services
 {
     public class WeatherForecastService :
-        BaseService<Models.WeatherForecast, Entities.WeatherForecast, WeatherForecastSearchObject>, IWeatherForecastService
+        BaseCRUDService<Models.WeatherForecast, Entities.WeatherForecast, WeatherForecastSearchObject, WeatherForecastInsertRequest, WeatherForecastUpdateRequest>, IWeatherForecastService
     {
         public WeatherForecastService(DataContext context, IMapper mapper) : base(context,mapper)
         {
@@ -22,14 +23,6 @@ namespace UnitOfWork.Services
             {
                 filteredQuery = filteredQuery.Where(x => x.TemperatureC == search.TemperatureC);
             }
-
-
-            //if (search?.TemperatureF != null)
-            //{
-            //    filteredQuery = filteredQuery.Where(x => x.TemperatureF == search.TemperatureF);
-            //}
-
-
 
             return filteredQuery;
         }

@@ -1,8 +1,7 @@
-namespace UnitOfWork.Entities
+﻿namespace UnitOfWork.Requests
 {
-    public class WeatherForecast
+    public class WeatherForecastInsertRequest
     {
-        public int Id { get; set; }
         public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }
